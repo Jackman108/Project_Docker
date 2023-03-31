@@ -6,7 +6,7 @@ services:
     stdin_open: true
     tty: true
     volumes:
-      - ./frontend/src:/usr/src/app/src
+      - ./frontend/src:/usr/src/app/src:rw
 
   api:
     command: npm run dev
