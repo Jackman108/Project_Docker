@@ -14,16 +14,26 @@ app.get("/test", (req, res) => {
     res.send("Our api server is working correctly");
 }); 
 
+app.get("/api/testapidata", (req, res) => {
+    res.json({
+        testapidata: true
+    });
+});
+
+app.get("/testWithCurrentUser", (req, res) => {
+    axios.get(authApiUrl + "/currentUser").then(response => {
+        res.json({
+            testWithCurrentUser: true,
+            currentUserFromAuth: response.data
+    });
+    });
+});
+
 const startServer = () => {
     app.listen(port, () => {
         console.log(`Started api service on port: ${port}`);
         console.log(`On host ${host}`)
         console.log(`On database ${db}`)
-
-        /* Post.find(function(err, posts) {
-            if (err) return console.error(err);
-            console.log("posts", posts)
-        })*/
 
         const silence = new Post({ name: "Silence" });
         silence.save()
@@ -35,19 +45,6 @@ const startServer = () => {
         });
     });
 }
-
-app.get("/test", (req, res) => {
-    res.send("Our api server is working correctly");
-});
-
-app.get("/testWithCurrentUser", (req, res) => {
-    axios.get(authApiUrl + "/currentUser").then(response => {
-        res.json({
-            testWithCurrentUser: true,
-            currentUserFromAuth: response.data
-    });
-    });
-});
 
 connectDb()
 .on("error", console.log)
