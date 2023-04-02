@@ -66,13 +66,32 @@ services:
       - frontend
       - api
       - auth
+      - mail
+    networks:
+      - realworld-docker-network
+  
+  mail:
+    image: namshi/smtp:latest
+    container_name: realworld-docker-mail
+    environment:
+      - SMTP_HOST=smtp.gmail.com
+      - SMTP_PORT=587
+      - SMTP_USERNAME=${SMTP_USERNAME}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - SMTP_AUTH=login
+      - SMTP_TLS=true
+    volumes:
+      - ./mail/main.cf:/etc/postfix/main.cf:ro
+      - ./mail/virtual:/etc/postfix/virtual:ro
+      - mail_data:/var/spool/postfix
     networks:
       - realworld-docker-network
   
 volumes:
     mongodb_api:
     mongodb_auth:
+    mail_data:
 
 networks:
   realworld-docker-network:
-    driver: bridge  
+    driver: bridge

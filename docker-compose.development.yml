@@ -28,3 +28,22 @@ services:
   nginx:
     volumes:
       - ./nginx/nginx.conf.dev:/etc/nginx/conf.d/nginx.conf
+  
+  mail:
+    image: namshi/smtp:latest
+    container_name: realworld-docker-mail
+    environment:
+      - SMTP_HOST=smtp.gmail.com
+      - SMTP_PORT=587
+      - SMTP_USERNAME=${SMTP_USERNAME}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - SMTP_AUTH=login
+      - SMTP_TLS=true
+    volumes:
+      - ./mail/main.cf:/etc/postfix/main.cf:ro
+      - ./mail/virtual:/etc/postfix/virtual:ro
+      - mail_data:/var/spool/postfix
+    ports:
+      - "587:587"
+    networks:
+      - realworld-docker-network
